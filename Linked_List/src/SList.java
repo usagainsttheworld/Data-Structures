@@ -15,6 +15,7 @@
 public class SList {
 
     private SListNode head;
+    private SListNode tail;
     private int size;
 
     /**
@@ -24,6 +25,7 @@ public class SList {
     public SList() {
         size = 0;
         head = null;
+        tail = null;
     }
 
     /**
@@ -50,6 +52,7 @@ public class SList {
      **/
 
     public void insertFront(Object obj) {
+        tail = SListNode(head, null);
         head = new SListNode(obj, head);
         size++;
     }
@@ -62,12 +65,10 @@ public class SList {
     public void insertEnd(Object obj) {
         if (head == null) {
             head = new SListNode(obj);
-        } else {
-            SListNode node = head;
-            while (node.next != null) {
-                node = node.next;
-            }
-            node.next = new SListNode(obj);
+            tail = new SListNode(obj);
+        }
+            tail.next = new SListNode(obj);
+            tail = SListNode(obj, null);
         }
         size++;
     }
@@ -128,6 +129,15 @@ public class SList {
 
     public static void main (String[] args) {
         // Fill in your solution for Part I here.
+        SList test1 = new SList();
+        test1.insertEnd(new Integer(6));
+        test1.insertEnd(new Integer(9));
+        test1.insertEnd(new Integer(12));
+        System.out.println();
+        System.out.println("Here is a list after insert End 6, 9, 12: " + test1.toString());
+        test1.insertFront(new Integer(3));
+        test1.insertEnd(new Integer(15));
+        System.out.println("Here is a list after insert front 3 and End 15: " + test1.toString());
 
         testEmpty();
         testAfterInsertFront();
@@ -230,3 +240,4 @@ public class SList {
                 "insertFront after insertEnd failed");
     }
 }
+
