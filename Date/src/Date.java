@@ -26,7 +26,6 @@ class Date {
             this.day = day;
             this.year = year;
         }
-
     }
 
     /** Constructs a Date object corresponding to the given string.
@@ -170,7 +169,34 @@ class Date {
      *  @return the difference in days between d and this date.
      */
     public int difference(Date d) {
-        return 0;                           // replace this line with your solution
+        int diff_of_days = 0;
+        Date smalldate = null;
+        Date bigdate = null;
+        if (isAfter(d)) {
+            bigdate = this;
+            smalldate = d;
+        } else {
+            bigdate = d;
+            smalldate = this;
+        }
+        if (this.year == d.year) {
+            diff_of_days = bigdate.dayInYear() - smalldate.dayInYear();
+        } else {
+            int i;
+            for (i = smalldate.year; i < bigdate.year; i++) {
+                if (isLeapYear(i)) {
+                    diff_of_days += 366;
+                } else {
+                    diff_of_days += 365;
+                }
+            }
+            diff_of_days += bigdate.dayInYear() - smalldate.dayInYear();
+        }
+        if (isBefore(d)) {
+            return - diff_of_days;
+        } else {
+            return diff_of_days;
+        }
     }
 
     public static void main(String[] argv) {
