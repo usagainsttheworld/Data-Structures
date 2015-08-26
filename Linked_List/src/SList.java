@@ -15,7 +15,6 @@
 public class SList {
 
     private SListNode head;
-    private SListNode tail;
     private int size;
 
     /**
@@ -25,7 +24,6 @@ public class SList {
     public SList() {
         size = 0;
         head = null;
-        tail = null;
     }
 
     /**
@@ -52,7 +50,6 @@ public class SList {
      **/
 
     public void insertFront(Object obj) {
-        tail = SListNode(head, null);
         head = new SListNode(obj, head);
         size++;
     }
@@ -65,10 +62,12 @@ public class SList {
     public void insertEnd(Object obj) {
         if (head == null) {
             head = new SListNode(obj);
-            tail = new SListNode(obj);
-        }
-            tail.next = new SListNode(obj);
-            tail = SListNode(obj, null);
+        } else {
+            SListNode node = head;
+            while (node.next != null) {
+                node = node.next;
+            }
+            node.next = new SListNode(obj);
         }
         size++;
     }
