@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+
 /**
  * Created by Ling on 2015-09-04.
  */
@@ -21,9 +24,32 @@ public class Homework3 {
      *  @param ints the input array.
      **/
 
+    public static void swap(int[] array, int i, int j){
+        int list_len = array.length;
+        int temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+
     public static void smoosh(int[] ints) {
         // Fill in your solution here.  (Ours is twelve lines long, not counting
         // blank lines or lines already present in this file.)
+        int tempdup = ints[0];
+        for (int i = 1; i <ints.length; i++) {
+            if (ints[i] == tempdup) {
+                ints[i] = -1;
+            }
+            else{
+                tempdup = ints[i];
+            }
+        }
+        for (int i = 1; i < ints.length; i++) {
+            int j = i;
+            while (ints[j] != -1 && ints[j-1] == -1) {
+                swap (ints, j, j-1);
+                j--;
+            }
+        }
     }
 
     /**
