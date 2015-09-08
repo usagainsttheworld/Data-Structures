@@ -115,6 +115,16 @@ public class SList {
 
     public void squish() {
         // Fill in your solution here.  (Ours is eleven lines long.)
+        SListNode currentnode = head;
+        while (currentnode != null) {
+            if (currentnode.next != null && currentnode.item.equals(currentnode.next.item)) {
+                currentnode.next = currentnode.next.next;
+            }
+            else {
+                currentnode = currentnode.next;
+            }
+        }
+        /*System.out.println("after squish:" + toString());*/
     }
 
     /**
