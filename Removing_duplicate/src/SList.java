@@ -140,6 +140,13 @@ public class SList {
 
     public void twin() {
         // Fill in your solution here.  (Ours is seven lines long.)
+        SListNode currentnode = head;
+        while (currentnode != null) {
+            SListNode copynode = currentnode;
+            currentnode.next = copynode;
+            currentnode = copynode.next;
+        }
+        System.out.println("after twin:" + toString());
     }
 
     /**
