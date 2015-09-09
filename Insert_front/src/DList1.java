@@ -71,16 +71,6 @@ public class DList1 {
      */
     public void insertFront(int i) {
         // Your solution here.
-        DListNode1 insert_node = new DListNode1(i);
-        if (size == 0) {
-            head = insert_node;
-            tail = head;
-        } else {
-            insert_node.next = head;
-            tail.prev = insert_node;
-            head = insert_node;
-        }
-        size++;
     }
 
     /**
@@ -89,11 +79,6 @@ public class DList1 {
      */
     public void removeFront() {
         // Your solution here.
-        if (size != 0) {
-            head.next = head;
-            head.prev = null;
-            size --;
-        }
     }
 
     /**
@@ -225,5 +210,4 @@ public class DList1 {
             System.out.println("size is wrong.");
         }
     }
-
 }
