@@ -124,7 +124,7 @@ public class SList {
                 currentnode = currentnode.next;
             }
         }
-        /*System.out.println("after squish:" + toString());*/
+//        System.out.println("after squish:" + toString());
     }
 
     /**
@@ -142,11 +142,12 @@ public class SList {
         // Fill in your solution here.  (Ours is seven lines long.)
         SListNode currentnode = head;
         while (currentnode != null) {
-            SListNode copynode = currentnode;
+            SListNode copynode = new SListNode(currentnode.item);
+            copynode.next = currentnode.next;
             currentnode.next = copynode;
             currentnode = copynode.next;
         }
-        System.out.println("after twin:" + toString());
+//        System.out.println("after twin:" + toString());
     }
 
     /**
