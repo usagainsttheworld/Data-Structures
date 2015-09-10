@@ -24,9 +24,16 @@ public class PixImage {
      *  Define any variables associated with a PixImage object here.  These
      *  variables MUST be private.
      */
+    private int pwidth;
+    private int pheight;
+    private int psize;
+    private pixel[] RGB ;
 
-
-
+    static class pixel {
+        public short R;
+        public short G;
+        public short B;
+    }
 
     /**
      * PixImage() constructs an empty PixImage with a specified width and height.
@@ -37,6 +44,10 @@ public class PixImage {
      */
     public PixImage(int width, int height) {
         // Your solution here.
+        pwidth = width;
+        pheight = height;
+        psize = pwidth * pheight;
+        RGB = new pixel[psize];
     }
 
     /**
@@ -46,7 +57,7 @@ public class PixImage {
      */
     public int getWidth() {
         // Replace the following line with your solution.
-        return 1;
+        return pwidth;
     }
 
     /**
@@ -56,7 +67,7 @@ public class PixImage {
      */
     public int getHeight() {
         // Replace the following line with your solution.
-        return 1;
+        return pheight;
     }
 
     /**
@@ -68,7 +79,8 @@ public class PixImage {
      */
     public short getRed(int x, int y) {
         // Replace the following line with your solution.
-        return 0;
+        pixel getpixel = RGB[y * pwidth + x];
+        return getpixel.R;
     }
 
     /**
@@ -80,7 +92,8 @@ public class PixImage {
      */
     public short getGreen(int x, int y) {
         // Replace the following line with your solution.
-        return 0;
+        pixel getpixel = RGB[y * pwidth + x];
+        return getpixel.G;
     }
 
     /**
@@ -92,7 +105,8 @@ public class PixImage {
      */
     public short getBlue(int x, int y) {
         // Replace the following line with your solution.
-        return 0;
+        pixel getpixel = RGB[y * pwidth + x];
+        return getpixel.B;
     }
 
     /**
@@ -110,6 +124,12 @@ public class PixImage {
      */
     public void setPixel(int x, int y, short red, short green, short blue) {
         // Your solution here.
+        if ((red >= 0 && red <= 255) && (green >= 0 && red <= 255) && (blue >= 0 && red <= 255) ) {
+            pixel currentpixel = RGB [y*pwidth + x];
+            currentpixel.R = red;
+            currentpixel.G = green;
+            currentpixel.B = blue;
+        }
     }
 
     /**
@@ -123,7 +143,11 @@ public class PixImage {
      */
     public String toString() {
         // Replace the following line with your solution.
-        return "";
+        String result = "The size of PixImage is: " + psize + ". Its RGB is:[ ";
+        for (pixel p : RGB) {
+            result = result + p.R + "&" + p.G + "&" + p.B + "&" + " ";
+        }
+        return result + "]";
     }
 
     /**
