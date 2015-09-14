@@ -152,7 +152,7 @@ public class PixImage {
 
         return result + "]";
     }
-
+    
     /**
      * boxBlur() returns a blurred version of "this" PixImage.
      *
@@ -187,10 +187,20 @@ public class PixImage {
         if (numIterations <= 0) {
             return this;
         } else {
-            for (int i = 1; i <= numIterations; i++) {
-
-
+            for (int i = 0; int i < pheight; i++) {
+                for (int j = 0; int j < pwidth; j++) {
+                    if ((j == 0 || j == pwidth-1) && (i == 0 || i == pheight-1)) {
+                        four_neighbor;
+                    }
+                    if (i == 0 || i == pheight-1 || j == 0 || j == pwidth-1) {
+                        six_neighbor;
+                    } else {
+                        nine_neighbor;
+                    }
+                    RGB[j][i]
+                }
             }
+
         }
     }
 
