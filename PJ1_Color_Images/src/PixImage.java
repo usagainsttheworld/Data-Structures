@@ -27,7 +27,7 @@ public class PixImage {
     private int pwidth;
     private int pheight;
     private int psize;
-    private pixel[] RGB ;
+    private pixel[][] RGB ;
 
     static class pixel {
         public short R;
@@ -46,8 +46,8 @@ public class PixImage {
         // Your solution here.
         pwidth = width;
         pheight = height;
-        psize = pwidth * pheight;
-        RGB = new pixel[psize];
+        psize = pwidth*pheight;
+        RGB = new pixel[pheight][pwidth];
     }
 
     /**
@@ -79,7 +79,7 @@ public class PixImage {
      */
     public short getRed(int x, int y) {
         // Replace the following line with your solution.
-        pixel getpixel = RGB[y * pwidth + x];
+        pixel getpixel = RGB[y][x];
         return getpixel.R;
     }
 
@@ -92,7 +92,7 @@ public class PixImage {
      */
     public short getGreen(int x, int y) {
         // Replace the following line with your solution.
-        pixel getpixel = RGB[y * pwidth + x];
+        pixel getpixel = RGB[y][x];
         return getpixel.G;
     }
 
@@ -105,7 +105,7 @@ public class PixImage {
      */
     public short getBlue(int x, int y) {
         // Replace the following line with your solution.
-        pixel getpixel = RGB[y * pwidth + x];
+        pixel getpixel = RGB[y][x];
         return getpixel.B;
     }
 
@@ -125,7 +125,7 @@ public class PixImage {
     public void setPixel(int x, int y, short red, short green, short blue) {
         // Your solution here.
         if ((red >= 0 && red <= 255) && (green >= 0 && red <= 255) && (blue >= 0 && red <= 255) ) {
-            pixel currentpixel = RGB [y*pwidth + x];
+            pixel currentpixel = RGB [y][x];
             currentpixel.R = red;
             currentpixel.G = green;
             currentpixel.B = blue;
@@ -144,9 +144,12 @@ public class PixImage {
     public String toString() {
         // Replace the following line with your solution.
         String result = "The size of PixImage is: " + psize + ". Its RGB is:[ ";
-        for (pixel p : RGB) {
-            result = result + p.R + "&" + p.G + "&" + p.B + "&" + " ";
+        for (int i = 0; int i < pheight; i++) {
+            for (int j = 0; int j < pwidth; j++) {
+                result = result + RGB[j][i].R + "&" + RGB[j][i].G + "&" + RGB[j][i].B + "&" + " ";
+            }
         }
+
         return result + "]";
     }
 
@@ -181,7 +184,14 @@ public class PixImage {
      */
     public PixImage boxBlur(int numIterations) {
         // Replace the following line with your solution.
-        return this;
+        if (numIterations <= 0) {
+            return this;
+        } else {
+            for (int i = 1; i <= numIterations; i++) {
+
+
+            }
+        }
     }
 
     /**
