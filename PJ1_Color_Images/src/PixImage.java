@@ -197,7 +197,12 @@ public class PixImage {
         if (numIterations <= 0) {
             return this;
         } else {
+            PixImage final_blurimage = new PixImage();
             for (int k = 0; k < numIterations; k++){
+                PixImage blur_image = new PixImage();
+                blur_image.pwidth = this.pwidth;
+                blur_image.pheight = this.pheight;
+                blur_image.psize = this.psize;
                 for (int i = 0; i < pheight; i++) {
                     for (int j = 0; j < pwidth; j++) {
                         if ((j == 0 || j == pwidth-1) && (i == 0 || i == pheight-1)) {
@@ -219,10 +224,12 @@ public class PixImage {
                         redavg = redsofar / num_neighbor;
                         greenavg = greensofar / num_neighbor;
                         blueavg = bluesofar / num_neighbor;
-                        setPixel(j, i, redavg, greenavg, blueavg);
+                        blur_image.setPixel(j, i, redavg, greenavg, blueavg);
                     }
                 }
+                final_blurimage = blur_image;
             }
+            return final_blurimage;
         }
     }
     public int[][] four_neighbor (int x, int y) {
