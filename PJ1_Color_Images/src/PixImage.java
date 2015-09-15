@@ -188,25 +188,41 @@ public class PixImage {
         // Replace the following line with your solution.
         int[][] neighbor_array = new int[][];
         int num_neighbor;
+        int redsofar = 0;
+        int greensofar = 0;
+        int bluesofar = 0;
+        short redavg = 0;
+        short greenavg = 0;
+        short blueavg = 0;
         if (numIterations <= 0) {
             return this;
         } else {
-            for (int i = 0; i < pheight; i++) {
-                for (int j = 0; j < pwidth; j++) {
-                    if ((j == 0 || j == pwidth-1) && (i == 0 || i == pheight-1)) {
-                        neighbor_array = four_neighbor(j, i);
-                        num_neighbor = 4;
-                    }
-                    if (i == 0 || i == pheight-1 || j == 0 || j == pwidth-1) {
-                        neighbor_array = six_neighbor(j, i);
-                        num_neighbor = 6;
-                    } else {
-                        neighbor_array = nine_neighbor(j, i);
-                        num_neighbor = 9;
+            for (int k = 0; k < numIterations; k++){
+                for (int i = 0; i < pheight; i++) {
+                    for (int j = 0; j < pwidth; j++) {
+                        if ((j == 0 || j == pwidth-1) && (i == 0 || i == pheight-1)) {
+                            neighbor_array = four_neighbor(j, i);
+                            num_neighbor = 4;
+                        }
+                        if (i == 0 || i == pheight-1 || j == 0 || j == pwidth-1) {
+                            neighbor_array = six_neighbor(j, i);
+                            num_neighbor = 6;
+                        } else {
+                            neighbor_array = nine_neighbor(j, i);
+                            num_neighbor = 9;
+                        }
+                        for (int[] cell : neighbor_array) {
+                            redsofar += getRed(cell[0],cell[1]);
+                            greensofar += getRed(cell[0],cell[1]);
+                            bluesofar += getRed(cell[0],cell[1]);
+                        }
+                        redavg = redsofar / num_neighbor;
+                        greenavg = greensofar / num_neighbor;
+                        blueavg = bluesofar / num_neighbor;
+                        setPixel(j, i, redavg, greenavg, blueavg);
                     }
                 }
             }
-
         }
     }
     public int[][] four_neighbor (int x, int y) {
@@ -271,7 +287,6 @@ public class PixImage {
             neighbors [5] = new int[]{x+1,y-1};
         }
         return neighbors;
-
     }
     public int[][] nine_neighbor (int x, int y) {
         int [][] neighbors = new int[9][2];
