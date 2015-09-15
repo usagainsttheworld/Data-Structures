@@ -144,8 +144,8 @@ public class PixImage {
     public String toString() {
         // Replace the following line with your solution.
         String result = "The size of PixImage is: " + psize + ". Its RGB is:[ ";
-        for (int i = 0; int i < pheight; i++) {
-            for (int j = 0; int j < pwidth; j++) {
+        for (int i = 0; i < pheight; i++) {
+            for (int j = 0; j < pwidth; j++) {
                 result = result + RGB[j][i].R + "&" + RGB[j][i].G + "&" + RGB[j][i].B + "&" + " ";
             }
         }
@@ -187,18 +187,22 @@ public class PixImage {
     public PixImage boxBlur(int numIterations) {
         // Replace the following line with your solution.
         int[][] neighbor_array = new int[][];
+        int num_neighbor;
         if (numIterations <= 0) {
             return this;
         } else {
-            for (int i = 0; int i < pheight; i++) {
-                for (int j = 0; int j < pwidth; j++) {
+            for (int i = 0; i < pheight; i++) {
+                for (int j = 0; j < pwidth; j++) {
                     if ((j == 0 || j == pwidth-1) && (i == 0 || i == pheight-1)) {
                         neighbor_array = four_neighbor(j, i);
+                        num_neighbor = 4;
                     }
                     if (i == 0 || i == pheight-1 || j == 0 || j == pwidth-1) {
                         neighbor_array = six_neighbor(j, i);
+                        num_neighbor = 6;
                     } else {
                         neighbor_array = nine_neighbor(j, i);
+                        num_neighbor = 9;
                     }
                 }
             }
@@ -206,29 +210,29 @@ public class PixImage {
         }
     }
     public int[][] four_neighbor (int x, int y) {
-        int [][] neighbors = new int[4][2];
+        int[][] neighbors = new int[4][2];
         if (x == 0 && y == 0) {
-            neighbors [0] = {x,y};
-            neighbors [1] = {x+1, y};
-            neighbors [2] = {x, y+1};
-            neighbors [3] = {x+1, y+1};
+            neighbors [0] = new int[]{x,y};
+            neighbors [1] = new int[]{x+1, y};
+            neighbors [2] = new int[]{x, y+1};
+            neighbors [3] = new int[]{x+1, y+1};
         }
         if (x == 0 && y == pheight-1) {
-            neighbors [0] = {x,y};
-            neighbors [1] = {x+1, y};
-            neighbors [2] = {x, y-1};
-            neighbors [3] = {x+1, y-1};
+            neighbors [0] = new int[]{x,y};
+            neighbors [1] = new int[]{x+1, y};
+            neighbors [2] = new int[]{x, y-1};
+            neighbors [3] = new int[]{x+1, y-1};
         }
         if (x == pwidth-1 && y == 0) {
-            neighbors [0] = {x,y};
-            neighbors [1] = {x-1, y};
-            neighbors [2] = {x, y+1};
-            neighbors [3] = {x-1, y+1};
+            neighbors [0] = new int[]{x,y};
+            neighbors [1] = new int[]{x-1, y};
+            neighbors [2] = new int[]{x, y+1};
+            neighbors [3] = new int[]{x-1, y+1};
         } else {
-            neighbors [0] = {x,y};
-            neighbors [1] = {x-1, y};
-            neighbors [2] = {x, y-1};
-            neighbors [3] = {x-1, y-1};
+            neighbors [0] = new int[]{x,y};
+            neighbors [1] = new int[]{x-1, y};
+            neighbors [2] = new int[]{x, y-1};
+            neighbors [3] = new int[]{x-1, y-1};
         }
         return neighbors;
 
@@ -236,50 +240,50 @@ public class PixImage {
     public int[][] six_neighbor (int x, int y) {
         int [][] neighbors = new int[6][2];
         if (x == 0) {
-            neighbors [0] = {x,y};
-            neighbors [1] = {x+1, y};
-            neighbors [2] = {x, y+1};
-            neighbors [3] = {x+1, y+1};
-            neighbors [4] = {x, y-1};
-            neighbors [5] = {x+1, y-1};
+            neighbors [0] = new int[]{x,y};
+            neighbors [1] = new int[]{x+1, y};
+            neighbors [2] = new int[]{x, y+1};
+            neighbors [3] = new int[]{x+1, y+1};
+            neighbors [4] = new int[]{x, y-1};
+            neighbors [5] = new int[]{x+1, y-1};
         }
         if (y == 0) {
-            neighbors [0] = {x,y};
-            neighbors [1] = {x-1,y};
-            neighbors [2] = {x+1,y};
-            neighbors [3] = {x,y+1};
-            neighbors [4] = {x-1,y+1};
-            neighbors [5] = {x+1,y+1};
+            neighbors [0] = new int[]{x,y};
+            neighbors [1] = new int[]{x-1,y};
+            neighbors [2] = new int[]{x+1,y};
+            neighbors [3] = new int[]{x,y+1};
+            neighbors [4] = new int[]{x-1,y+1};
+            neighbors [5] = new int[]{x+1,y+1};
         }
         if (x == pwidth-1) {
-            neighbors [0] = {x,y};
-            neighbors [1] = {x-1, y};
-            neighbors [2] = {x, y+1};
-            neighbors [3] = {x-1, y+1};
-            neighbors [4] = {x,y-1};
-            neighbors [5] = {x-1,y-1};
+            neighbors [0] = new int[]{x,y};
+            neighbors [1] = new int[]{x-1, y};
+            neighbors [2] = new int[]{x, y+1};
+            neighbors [3] = new int[]{x-1, y+1};
+            neighbors [4] = new int[]{x,y-1};
+            neighbors [5] = new int[]{x-1,y-1};
         } else {
-            neighbors [0] = {x,y};
-            neighbors [1] = {x-1,y};
-            neighbors [2] = {x+1,y};
-            neighbors [3] = {x,y-1};
-            neighbors [4] = {x-1,y-1};
-            neighbors [5] = {x+1,y-1};
+            neighbors [0] = new int[]{x,y};
+            neighbors [1] = new int[]{x-1,y};
+            neighbors [2] = new int[]{x+1,y};
+            neighbors [3] = new int[]{x,y-1};
+            neighbors [4] = new int[]{x-1,y-1};
+            neighbors [5] = new int[]{x+1,y-1};
         }
         return neighbors;
 
     }
     public int[][] nine_neighbor (int x, int y) {
         int [][] neighbors = new int[9][2];
-        neighbors [0] = {x,y};
-        neighbors [1] = {x-1,y};
-        neighbors [2] = {x+1,y};
-        neighbors [3] = {x,y-1};
-        neighbors [4] = {x-1,y-1};
-        neighbors [5] = {x+1,y-1};
-        neighbors [6] = {x, y+1};
-        neighbors [7] = {x-1,y+1};
-        neighbors [8] = {x+1,y+1};
+        neighbors [0] = new int[]{x,y};
+        neighbors [1] = new int[]{x-1,y};
+        neighbors [2] = new int[]{x+1,y};
+        neighbors [3] = new int[]{x,y-1};
+        neighbors [4] = new int[]{x-1,y-1};
+        neighbors [5] = new int[]{x+1,y-1};
+        neighbors [6] = new int[]{x, y+1};
+        neighbors [7] = new int[]{x-1,y+1};
+        neighbors [8] = new int[]{x+1,y+1};
         return neighbors;
     }
     /**
