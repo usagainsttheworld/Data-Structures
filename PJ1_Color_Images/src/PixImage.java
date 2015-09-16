@@ -199,7 +199,8 @@ public class PixImage {
         if (numIterations <= 0) {
             return this;
         } else {
-            PixImage final_blurimage = new PixImage(pwidth,pheight);
+            PixImage current_image = new PixImage(pwidth,pheight);
+            current_image.RGB = this.RGB;
             for (int k = 0; k < numIterations; k++){
                 PixImage blur_image = new PixImage(pwidth,pheight);
                 for (int i = 0; i < pheight; i++) {
@@ -209,7 +210,7 @@ public class PixImage {
                                 neighbor_array = new int[4][];
                             }
                             neighbor_array = four_neighbor(j, i);
-                            System.out.println("corner cells: " + "i " + i + "j " + j + " " );
+//                            System.out.println("corner cells: " + "i " + i + "j " + j + " " );
                             num_neighbor = 4;
                         }
                         else if (i == 0 || i == pheight-1 || j == 0 || j == pwidth-1) {
@@ -217,7 +218,7 @@ public class PixImage {
                                 neighbor_array = new int[6][];
                             }
                             neighbor_array = six_neighbor(j, i);
-                            System.out.println("edge cells: " + "i " + i + "j " + j + " " );
+//                            System.out.println("edge cells: " + "i " + i + "j " + j + " " );
 
                             num_neighbor = 6;
                         } else {
@@ -225,7 +226,7 @@ public class PixImage {
                                 neighbor_array = new int[9][];
                             }
                             neighbor_array = nine_neighbor(j, i);
-                            System.out.println("center cells: " + "i " + i + "j " + j + " " );
+//                            System.out.println("center cells: " + "i " + i + "j " + j + " " );
 
                             num_neighbor = 9;
                         }
@@ -233,9 +234,9 @@ public class PixImage {
                         greensofar = 0;
                         bluesofar = 0;
                         for (int[] cell : neighbor_array) {
-                            redsofar += getRed(cell[0],cell[1]);
-                            greensofar += getGreen(cell[0],cell[1]);
-                            bluesofar += getBlue(cell[0],cell[1]);
+                            redsofar += current_image.getRed(cell[0],cell[1]);
+                            greensofar += current_image.getGreen(cell[0],cell[1]);
+                            bluesofar += current_image.getBlue(cell[0],cell[1]);
                         }
                         redavg = redsofar / num_neighbor;
                         greenavg = greensofar / num_neighbor;
@@ -243,9 +244,9 @@ public class PixImage {
                         blur_image.setPixel(j, i, (short)redavg, (short)greenavg, (short)blueavg);
                     }
                 }
-                final_blurimage = blur_image;
+                current_image = blur_image;
             }
-            return final_blurimage;
+            return current_image;
         }
     }
     public int[][] four_neighbor (int x, int y)  {
@@ -494,21 +495,21 @@ public class PixImage {
 //                                { 81, 137, 187 },
 //                                { 120, 164, 218 } })),
 //                "Incorrect box blur (1 rep):\n" + image1.boxBlur(1));
-        doTest(image1.boxBlur(2).equals(
-                        array2PixImage(new int[][] { { 91, 118, 146 },
-                                { 108, 134, 161 },
-                                { 125, 151, 176 } })),
-                "Incorrect box blur (2 rep):\n" + image1.boxBlur(2));
+//        doTest(image1.boxBlur(2).equals(
+//                        array2PixImage(new int[][] { { 91, 118, 146 },
+//                                { 108, 134, 161 },
+//                                { 125, 151, 176 } })),
+//                "Incorrect box blur (2 rep):\n" + image1.boxBlur(2));
 //        doTest(image1.boxBlur(2).equals(image1.boxBlur(1).boxBlur(1)),
 //                "Incorrect box blur (1 rep + 1 rep):\n" +
 //                        image1.boxBlur(2) + image1.boxBlur(1).boxBlur(1));
 //
 //        System.out.println("Testing edge detection on a 3x3 image.");
-//        doTest(image1.sobelEdges().equals(
-//                        array2PixImage(new int[][] { { 104, 189, 180 },
-//                                { 160, 193, 157 },
-//                                { 166, 178, 96 } })),
-//                "Incorrect Sobel:\n" + image1.sobelEdges());
+        doTest(image1.sobelEdges().equals(
+                        array2PixImage(new int[][] { { 104, 189, 180 },
+                                { 160, 193, 157 },
+                                { 166, 178, 96 } })),
+                "Incorrect Sobel:\n" + image1.sobelEdges());
 //
 //
 //        PixImage image2 = array2PixImage(new int[][] { { 0, 100, 100 },
