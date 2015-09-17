@@ -47,9 +47,9 @@ public class PixImage {
         pwidth = width;
         pheight = height;
         psize = pwidth*pheight;
-        RGB = new pixel[pheight][pwidth];
-        for (int i = 0; i < pheight; i++) {
-            for (int j = 0; j < pwidth; j++) {
+        RGB = new pixel[pwidth][pheight];
+        for (int i = 0; i < pwidth; i++) {
+            for (int j = 0; j < pheight; j++) {
                 RGB[i][j] = new pixel();
             }
         }
@@ -84,7 +84,7 @@ public class PixImage {
      */
     public short getRed(int x, int y) {
         // Replace the following line with your solution.
-        pixel getpixel = RGB[y][x];
+        pixel getpixel = RGB[x][y];
         return getpixel.R;
     }
 
@@ -97,7 +97,7 @@ public class PixImage {
      */
     public short getGreen(int x, int y) {
         // Replace the following line with your solution.
-        pixel getpixel = RGB[y][x];
+        pixel getpixel = RGB[x][y];
         return getpixel.G;
     }
 
@@ -110,7 +110,7 @@ public class PixImage {
      */
     public short getBlue(int x, int y) {
         // Replace the following line with your solution.
-        pixel getpixel = RGB[y][x];
+        pixel getpixel = RGB[x][y];
         return getpixel.B;
     }
 
@@ -130,7 +130,7 @@ public class PixImage {
     public void setPixel(int x, int y, short red, short green, short blue) {
         // Your solution here.
         if ((red >= 0 && red <= 255) && (green >= 0 && red <= 255) && (blue >= 0 && red <= 255) ) {
-            pixel currentpixel = RGB [y][x];
+            pixel currentpixel = RGB [x][y];
             currentpixel.R = red;
             currentpixel.G = green;
             currentpixel.B = blue;
@@ -149,9 +149,9 @@ public class PixImage {
     public String toString() {
         // Replace the following line with your solution.
         String result = "The size of PixImage is: " + psize + ". Its RGB is:[ ";
-        for (int i = 0; i < pheight; i++) {
-            for (int j = 0; j < pwidth; j++) {
-                result = result + RGB[j][i].R + "&" + RGB[j][i].G + "&" + RGB[j][i].B + " ";
+        for (int i = 0; i < pwidth; i++) {
+            for (int j = 0; j < pheight; j++) {
+                result = result + RGB[i][j].R + "&" + RGB[i][j].G + "&" + RGB[i][j].B + " ";
             }
         }
 
@@ -203,21 +203,21 @@ public class PixImage {
             current_image.RGB = this.RGB;
             for (int k = 0; k < numIterations; k++){
                 PixImage blur_image = new PixImage(pwidth,pheight);
-                for (int i = 0; i < pheight; i++) {
-                    for (int j = 0; j < pwidth; j++) {
-                        if ((j == 0 || j == pwidth-1) && (i == 0 || i == pheight-1)) {
+                for (int i = 0; i < pwidth; i++) {
+                    for (int j = 0; j < pheight; j++) {
+                        if ((j == 0 || j == pheight-1) && (i == 0 || i == pwidth-1)) {
                             if (neighbor_array == null) {
                                 neighbor_array = new int[4][];
                             }
-                            neighbor_array = four_neighbor(j, i);
+                            neighbor_array = four_neighbor(i, j);
 //                            System.out.println("corner cells: " + "i " + i + "j " + j + " " );
                             num_neighbor = 4;
                         }
-                        else if (i == 0 || i == pheight-1 || j == 0 || j == pwidth-1) {
+                        else if (i == 0 || i == pwidth-1 || j == 0 || j == pheight-1) {
                             if (neighbor_array == null) {
                                 neighbor_array = new int[6][];
                             }
-                            neighbor_array = six_neighbor(j, i);
+                            neighbor_array = six_neighbor(i, j);
 //                            System.out.println("edge cells: " + "i " + i + "j " + j + " " );
 
                             num_neighbor = 6;
@@ -225,7 +225,7 @@ public class PixImage {
                             if (neighbor_array == null) {
                                 neighbor_array = new int[9][];
                             }
-                            neighbor_array = nine_neighbor(j, i);
+                            neighbor_array = nine_neighbor(i, j);
 //                            System.out.println("center cells: " + "i " + i + "j " + j + " " );
 
                             num_neighbor = 9;
@@ -241,7 +241,7 @@ public class PixImage {
                         redavg = redsofar / num_neighbor;
                         greenavg = greensofar / num_neighbor;
                         blueavg = bluesofar / num_neighbor;
-                        blur_image.setPixel(j, i, (short)redavg, (short)greenavg, (short)blueavg);
+                        blur_image.setPixel(i, j, (short)redavg, (short)greenavg, (short)blueavg);
                     }
                 }
                 current_image = blur_image;
@@ -276,14 +276,14 @@ public class PixImage {
         }
 
 
-        for (int i = 0; i < 2; i++) {
-            for (int j = 0; j < 4; j++) {
-                if (neighbors[j][i] < 0) {
-                    //throw new Exception("four neighbor,  " + i + " " + j);
-                    System.out.println("four neighbor,  " + i + " " + j + "x:" + x + "y:" + y + "neighbors value:" + neighbors[j][i]);
-                }
-            }
-        }
+//        for (int i = 0; i < 2; i++) {
+//            for (int j = 0; j < 4; j++) {
+//                if (neighbors[i][i] < 0) {
+//                    //throw new Exception("four neighbor,  " + i + " " + j);
+//                    System.out.println("four neighbor,  " + i + " " + j + "x:" + x + "y:" + y + "neighbors value:" + neighbors[j][i]);
+//                }
+//            }
+//        }
         return neighbors;
 
     }
@@ -320,14 +320,14 @@ public class PixImage {
             neighbors [4] = new int[]{x-1,y-1};
             neighbors [5] = new int[]{x+1,y-1};
         }
-        for (int i = 0; i < 2; i++) {
-            for (int j = 0; j < 6; j++) {
-                if (neighbors[j][i] < 0) {
-                    //throw new Exception("four neighbor,  " + i + " " + j);
-                    System.out.println("six neighbor,  " + i + " " + j + "x:" + x + "y:" + y + "neighbors value:" + neighbors[j][i]);
-                }
-            }
-        }
+//        for (int i = 0; i < 2; i++) {
+//            for (int j = 0; j < 6; j++) {
+//                if (neighbors[j][i] < 0) {
+//                    //throw new Exception("four neighbor,  " + i + " " + j);
+//                    System.out.println("six neighbor,  " + i + " " + j + "x:" + x + "y:" + y + "neighbors value:" + neighbors[j][i]);
+//                }
+//            }
+//        }
         return neighbors;
     }
     public int[][] nine_neighbor (int x, int y) {
@@ -341,14 +341,14 @@ public class PixImage {
         neighbors [6] = new int[]{x, y+1};
         neighbors [7] = new int[]{x-1,y+1};
         neighbors [8] = new int[]{x+1,y+1};
-        for (int i = 0; i < 2; i++) {
-            for (int j = 0; j < 9; j++) {
-                if (neighbors[j][i] < 0) {
-                    //throw new Exception("four neighbor,  " + i + " " + j);
-                    System.out.println("nine neighbor,  " + i + " " + j + "x:" + x + "y:" + y + "neighbors value:" + neighbors[j][i]);
-                }
-            }
-        }
+//        for (int i = 0; i < 2; i++) {
+//            for (int j = 0; j < 9; j++) {
+//                if (neighbors[j][i] < 0) {
+//                    //throw new Exception("four neighbor,  " + i + " " + j);
+//                    System.out.println("nine neighbor,  " + i + " " + j + "x:" + x + "y:" + y + "neighbors value:" + neighbors[j][i]);
+//                }
+//            }
+//        }
         return neighbors;
     }
     /**
@@ -483,49 +483,49 @@ public class PixImage {
         PixImage image1 = array2PixImage(new int[][] { { 0, 10, 240 },
                 { 30, 120, 250 },
                 { 80, 250, 255 } });
-//        System.out.println("Testing getWidth/getHeight on a 3x3 image.  " +
-//                "Input image:");
-//        System.out.print(image1);
-//        doTest(image1.getWidth() == 3 && image1.getHeight() == 3,
-//                "Incorrect image width and height.");
+        System.out.println("Testing getWidth/getHeight on a 3x3 image.  " +
+                "Input image:");
+        System.out.print(image1);
+        doTest(image1.getWidth() == 3 && image1.getHeight() == 3,
+                "Incorrect image width and height.");
 
-//        System.out.println("Testing blurring on a 3x3 image.");
-//        doTest(image1.boxBlur(1).equals(
-//                        array2PixImage(new int[][] { { 40, 108, 155 },
-//                                { 81, 137, 187 },
-//                                { 120, 164, 218 } })),
-//                "Incorrect box blur (1 rep):\n" + image1.boxBlur(1));
-//        doTest(image1.boxBlur(2).equals(
-//                        array2PixImage(new int[][] { { 91, 118, 146 },
-//                                { 108, 134, 161 },
-//                                { 125, 151, 176 } })),
-//                "Incorrect box blur (2 rep):\n" + image1.boxBlur(2));
-//        doTest(image1.boxBlur(2).equals(image1.boxBlur(1).boxBlur(1)),
-//                "Incorrect box blur (1 rep + 1 rep):\n" +
-//                        image1.boxBlur(2) + image1.boxBlur(1).boxBlur(1));
+        System.out.println("Testing blurring on a 3x3 image.");
+        doTest(image1.boxBlur(1).equals(
+                        array2PixImage(new int[][] { { 40, 108, 155 },
+                                { 81, 137, 187 },
+                                { 120, 164, 218 } })),
+                "Incorrect box blur (1 rep):\n" + image1.boxBlur(1));
+        doTest(image1.boxBlur(2).equals(
+                        array2PixImage(new int[][] { { 91, 118, 146 },
+                                { 108, 134, 161 },
+                                { 125, 151, 176 } })),
+                "Incorrect box blur (2 rep):\n" + image1.boxBlur(2));
+        doTest(image1.boxBlur(2).equals(image1.boxBlur(1).boxBlur(1)),
+                "Incorrect box blur (1 rep + 1 rep):\n" +
+                        image1.boxBlur(2) + image1.boxBlur(1).boxBlur(1));
 //
 //        System.out.println("Testing edge detection on a 3x3 image.");
-        doTest(image1.sobelEdges().equals(
-                        array2PixImage(new int[][] { { 104, 189, 180 },
-                                { 160, 193, 157 },
-                                { 166, 178, 96 } })),
-                "Incorrect Sobel:\n" + image1.sobelEdges());
+//        doTest(image1.sobelEdges().equals(
+//                        array2PixImage(new int[][] { { 104, 189, 180 },
+//                                { 160, 193, 157 },
+//                                { 166, 178, 96 } })),
+//                "Incorrect Sobel:\n" + image1.sobelEdges());
 //
 //
-//        PixImage image2 = array2PixImage(new int[][] { { 0, 100, 100 },
-//                { 0, 0, 100 } });
-//        System.out.println("Testing getWidth/getHeight on a 2x3 image.  " +
-//                "Input image:");
-//        System.out.print(image2);
-//        doTest(image2.getWidth() == 2 && image2.getHeight() == 3,
-//                "Incorrect image width and height.");
-//
-//        System.out.println("Testing blurring on a 2x3 image.");
-//        doTest(image2.boxBlur(1).equals(
-//                        array2PixImage(new int[][] { { 25, 50, 75 },
-//                                { 25, 50, 75 } })),
-//                "Incorrect box blur (1 rep):\n" + image2.boxBlur(1));
-//
+        PixImage image2 = array2PixImage(new int[][] { { 0, 100, 100 },
+                { 0, 0, 100 } });
+        System.out.println("Testing getWidth/getHeight on a 2x3 image.  " +
+                "Input image:");
+        System.out.print(image2);
+        doTest(image2.getWidth() == 2 && image2.getHeight() == 3,
+                "Incorrect image width and height.");
+
+        System.out.println("Testing blurring on a 2x3 image.");
+        doTest(image2.boxBlur(1).equals(
+                        array2PixImage(new int[][] { { 25, 50, 75 },
+                                { 25, 50, 75 } })),
+                "Incorrect box blur (1 rep):\n" + image2.boxBlur(1));
+
 //        System.out.println("Testing edge detection on a 2x3 image.");
 //        doTest(image2.sobelEdges().equals(
 //                        array2PixImage(new int[][] { { 122, 143, 74 },
