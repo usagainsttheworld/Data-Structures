@@ -210,7 +210,6 @@ public class PixImage {
                                 neighbor_array = new int[4][];
                             }
                             neighbor_array = four_neighbor(i, j);
-//                            System.out.println("corner cells: " + "i " + i + "j " + j + " " );
                             num_neighbor = 4;
                         }
                         else if (i == 0 || i == pwidth-1 || j == 0 || j == pheight-1) {
@@ -218,15 +217,12 @@ public class PixImage {
                                 neighbor_array = new int[6][];
                             }
                             neighbor_array = six_neighbor(i, j);
-//                            System.out.println("edge cells: " + "i " + i + "j " + j + " " );
-
                             num_neighbor = 6;
                         } else {
                             if (neighbor_array == null) {
                                 neighbor_array = new int[9][];
                             }
                             neighbor_array = nine_neighbor(i, j);
-//                            System.out.println("center cells: " + "i " + i + "j " + j + " " );
 
                             num_neighbor = 9;
                         }
@@ -274,16 +270,6 @@ public class PixImage {
             neighbors [2] = new int[]{x, y-1};
             neighbors [3] = new int[]{x-1, y-1};
         }
-
-
-//        for (int i = 0; i < 2; i++) {
-//            for (int j = 0; j < 4; j++) {
-//                if (neighbors[i][i] < 0) {
-//                    //throw new Exception("four neighbor,  " + i + " " + j);
-//                    System.out.println("four neighbor,  " + i + " " + j + "x:" + x + "y:" + y + "neighbors value:" + neighbors[j][i]);
-//                }
-//            }
-//        }
         return neighbors;
 
     }
@@ -320,14 +306,6 @@ public class PixImage {
             neighbors [4] = new int[]{x-1,y-1};
             neighbors [5] = new int[]{x+1,y-1};
         }
-//        for (int i = 0; i < 2; i++) {
-//            for (int j = 0; j < 6; j++) {
-//                if (neighbors[j][i] < 0) {
-//                    //throw new Exception("four neighbor,  " + i + " " + j);
-//                    System.out.println("six neighbor,  " + i + " " + j + "x:" + x + "y:" + y + "neighbors value:" + neighbors[j][i]);
-//                }
-//            }
-//        }
         return neighbors;
     }
     public int[][] nine_neighbor (int x, int y) {
@@ -341,14 +319,6 @@ public class PixImage {
         neighbors [6] = new int[]{x, y+1};
         neighbors [7] = new int[]{x-1,y+1};
         neighbors [8] = new int[]{x+1,y+1};
-//        for (int i = 0; i < 2; i++) {
-//            for (int j = 0; j < 9; j++) {
-//                if (neighbors[j][i] < 0) {
-//                    //throw new Exception("four neighbor,  " + i + " " + j);
-//                    System.out.println("nine neighbor,  " + i + " " + j + "x:" + x + "y:" + y + "neighbors value:" + neighbors[j][i]);
-//                }
-//            }
-//        }
         return neighbors;
     }
     /**
@@ -391,12 +361,79 @@ public class PixImage {
      * @return a grayscale PixImage representing the edges of the input image.
      * Whiter pixels represent stronger edges.
      */
+    public String getColor (String color) {
+        if (color = "red") {
+            return "getRed";
+        }
+        else if (color == "green") {
+            return "getGreen";
+        }
+        else if (color == "blue") {
+            return "getBlue";
+        }
+    }
+    public int get_gradient (int x, int y, String color, String vector) {
+        int gradient;
+        if (vector == x) {
+            int[][] cells = getcells4gradient(x, y, x);
+            gradient = (getColor(color)(cells[3][0], cells[3][1])) + getColor(color)(cells[5][0], cells[5][1])
+                    + 2 * getColor(color)(cells[4][0],cells[4][1])
+                    - getColor(color)(cells[6][0], cells[6][1]) + getColor(color)(cells[8][0], cells[8][1])
+                    - 2 * (getColor(color)(cells[7][0], cells[7][1]));
+        }
+        else if (vector == y){
+            int[][] cells = getcells4gradient(x, y, y);
+            gradient = (getColor(cells[3][0], cells[3][1])) + getColor(cells[5][0], cells[5][1])
+                    + 2 * getColor(cells[4][0], cells[4][1])
+                    - getColor(cells[6][0], cells[6][1]) + getColor(cells[8][0], cells[8][1])
+                    - 2 * (getColor(cells[7][0], cells[7][1]));
+        }
+    }
+    public int[][] getcells4gradient (int i, int j, String vector) {
+        int[][] cells = new int[9][2];
+        String x;
+        String y;
+        if (vector == x) {
+            cells[0] = new int[]{i,j-1};
+            cells[1] = new int[]{i,j};
+            cells[2] = new int[]{i,j+1};
+            cells[3] = new int[]{i-1,j-1};
+            cells[4] = new int[]{i-1,j};
+            cells[5] = new int[]{i-1,j+1};
+            cells[6] = new int[]{i+1,j-1};
+            cells[7] = new int[]{i+1,j};
+            cells[8] = new int[]{i+1,j+1};
+        }
+        else if (vector == y) {
+            cells[0] = new int[]{i-1,j};
+            cells[1] = new int[]{i,j};
+            cells[2] = new int[]{i+1,j};
+            cells[3] = new int[]{i-1,j-1};
+            cells[4] = new int[]{i,j-1};
+            cells[5] = new int[]{i+1,j-1};
+            cells[6] = new int[]{i-1,j+1};
+            cells[7] = new int[]{i,j+1};
+            cells[8] = new int[]{i+1,j+1};
+        }
+        return cells;
+    }
+
     public PixImage sobelEdges() {
         // Replace the following line with your solution.
-        return this;
+        static class gradient_vector{
+            static int[] red_gradient = new int[2];
+            static int[] green_gradient = new int[2];
+            static int[] blue_gradient = new int[2];
+            static int energy = 0;
+        }
+        for (int x = 0; x < pwidth; x++) {
+            for (int y = 0; y < pheight; y++) {
+            }
+        }
+    }
         // Don't forget to use the method mag2gray() above to convert energies to
         // pixel intensities.
-    }
+
 
 
     /**
