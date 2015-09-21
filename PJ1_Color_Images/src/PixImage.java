@@ -361,39 +361,37 @@ public class PixImage {
      * @return a grayscale PixImage representing the edges of the input image.
      * Whiter pixels represent stronger edges.
      */
-    public String getColor (String color) {
-        if (color = "red") {
-            return "getRed";
+    public short getColor (String color, int x, int y) {
+        if (color == "red") {
+            return getRed(x, y);
         }
         else if (color == "green") {
-            return "getGreen";
+            return getGreen(x, y);
         }
         else if (color == "blue") {
-            return "getBlue";
+            return getBlue(x, y);
         }
     }
     public int get_gradient (int x, int y, String color, String vector) {
         int gradient;
-        if (vector == x) {
-            int[][] cells = getcells4gradient(x, y, x);
-            gradient = (getColor(color)(cells[3][0], cells[3][1])) + getColor(color)(cells[5][0], cells[5][1])
-                    + 2 * getColor(color)(cells[4][0],cells[4][1])
-                    - getColor(color)(cells[6][0], cells[6][1]) + getColor(color)(cells[8][0], cells[8][1])
-                    - 2 * (getColor(color)(cells[7][0], cells[7][1]));
+        if (vector == "x") {
+            int[][] cells = getcells4gradient(x, y, vector);
+            gradient = getColor(color, cells[3][0], cells[3][1]) + getColor(color, cells[5][0], cells[5][1])
+                    + 2 * getColor(color, cells[4][0],cells[4][1])
+                    - getColor(color, cells[6][0], cells[6][1]) + getColor(color, cells[8][0], cells[8][1])
+                    - 2 * (getColor(color, cells[7][0], cells[7][1]));
         }
-        else if (vector == y){
-            int[][] cells = getcells4gradient(x, y, y);
-            gradient = (getColor(cells[3][0], cells[3][1])) + getColor(cells[5][0], cells[5][1])
-                    + 2 * getColor(cells[4][0], cells[4][1])
-                    - getColor(cells[6][0], cells[6][1]) + getColor(cells[8][0], cells[8][1])
-                    - 2 * (getColor(cells[7][0], cells[7][1]));
+        else if (vector == "y"){
+            int[][] cells = getcells4gradient(x, y, vector);
+            gradient = getColor(color, cells[3][0], cells[3][1]) + getColor(color, cells[5][0], cells[5][1])
+                    + 2 * getColor(color, cells[4][0], cells[4][1])
+                    - getColor(color, cells[6][0], cells[6][1]) + getColor(color, cells[8][0], cells[8][1])
+                    - 2 * (getColor(color, cells[7][0], cells[7][1]));
         }
     }
     public int[][] getcells4gradient (int i, int j, String vector) {
         int[][] cells = new int[9][2];
-        String x;
-        String y;
-        if (vector == x) {
+        if (vector == "x") {
             cells[0] = new int[]{i,j-1};
             cells[1] = new int[]{i,j};
             cells[2] = new int[]{i,j+1};
@@ -404,7 +402,7 @@ public class PixImage {
             cells[7] = new int[]{i+1,j};
             cells[8] = new int[]{i+1,j+1};
         }
-        else if (vector == y) {
+        else if (vector == "y") {
             cells[0] = new int[]{i-1,j};
             cells[1] = new int[]{i,j};
             cells[2] = new int[]{i+1,j};
@@ -418,16 +416,31 @@ public class PixImage {
         return cells;
     }
 
+    static class gradient {
+        public static int[] red_gradient = new int[2];
+        public static int[] green_gradient = new int[2];
+        public static int[] blue_gradient = new int[2];
+        public static int energy = 0;
+    }
+
     public PixImage sobelEdges() {
         // Replace the following line with your solution.
-        static class gradient_vector{
-            static int[] red_gradient = new int[2];
-            static int[] green_gradient = new int[2];
-            static int[] blue_gradient = new int[2];
-            static int energy = 0;
+        gradient[][] gradient4image = new gradient[pwidth][pheight];
+        for (int i = 0; i < pwidth; i++) {
+            for (int j = 0; j < pheight; j++) {
+                gradient4image[i][j] = new gradient();
+            }
         }
         for (int x = 0; x < pwidth; x++) {
             for (int y = 0; y < pheight; y++) {
+                gradient.red_gradient[0] = get_gradient ( x, y, "red", "x");
+                gradient.red_gradient[1] = get_gradient ( x, y, "red", "y");
+                gradient.green_gradient[0] = get_gradient ( x, y, "green", "x");
+                gradient.green_gradient[1] = get_gradient ( x, y, "green", "y");
+                gradient.blue_gradient[0] = get_gradient ( x, y, "blue", "x");
+                gradient.blue_gradient[1] = get_gradient ( x, y, "blue", "y");
+                gradient.energy = gradient.red_gradient[0]^2 + gradient.red_gradient[1]^2 + gradient.green_gradient[0]^2 + gradient.green_gradient[1]^2 +
+                        gradient.blue_gradient[0]^2 + gradient.blue_gradient[1]^2.
             }
         }
     }
