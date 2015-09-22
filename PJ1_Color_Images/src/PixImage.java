@@ -362,36 +362,35 @@ public class PixImage {
      * Whiter pixels represent stronger edges.
      */
     public short getColor (String color, int x, int y) {
-        if (color == "red") {
+        if (color.equalsIgnoreCase("red")) {
             return getRed(x, y);
         }
-        else if (color == "green") {
+        else if (color.equalsIgnoreCase("green")) {
             return getGreen(x, y);
-        }
-        else if (color == "blue") {
+        } else {
             return getBlue(x, y);
         }
     }
     public int get_gradient (int x, int y, String color, String vector) {
         int gradient;
-        if (vector == "x") {
+        if (vector.equalsIgnoreCase("x")) {
             int[][] cells = getcells4gradient(x, y, vector);
             gradient = getColor(color, cells[3][0], cells[3][1]) + getColor(color, cells[5][0], cells[5][1])
                     + 2 * getColor(color, cells[4][0],cells[4][1])
                     - getColor(color, cells[6][0], cells[6][1]) + getColor(color, cells[8][0], cells[8][1])
                     - 2 * (getColor(color, cells[7][0], cells[7][1]));
-        }
-        else if (vector == "y"){
+        } else {
             int[][] cells = getcells4gradient(x, y, vector);
             gradient = getColor(color, cells[3][0], cells[3][1]) + getColor(color, cells[5][0], cells[5][1])
                     + 2 * getColor(color, cells[4][0], cells[4][1])
                     - getColor(color, cells[6][0], cells[6][1]) + getColor(color, cells[8][0], cells[8][1])
                     - 2 * (getColor(color, cells[7][0], cells[7][1]));
         }
+        return gradient;
     }
     public int[][] getcells4gradient (int i, int j, String vector) {
         int[][] cells = new int[9][2];
-        if (vector == "x") {
+        if (vector.equalsIgnoreCase("x")) {
             cells[0] = new int[]{i,j-1};
             cells[1] = new int[]{i,j};
             cells[2] = new int[]{i,j+1};
@@ -401,8 +400,7 @@ public class PixImage {
             cells[6] = new int[]{i+1,j-1};
             cells[7] = new int[]{i+1,j};
             cells[8] = new int[]{i+1,j+1};
-        }
-        else if (vector == "y") {
+        } else {
             cells[0] = new int[]{i-1,j};
             cells[1] = new int[]{i,j};
             cells[2] = new int[]{i+1,j};
@@ -422,7 +420,9 @@ public class PixImage {
         public static int[] blue_gradient = new int[2];
         public static int energy = 0;
     }
-
+    public int square (int x) {
+        return x*x;
+    }
     public PixImage sobelEdges() {
         // Replace the following line with your solution.
         gradient[][] gradient4image = new gradient[pwidth][pheight];
@@ -439,8 +439,8 @@ public class PixImage {
                 gradient.green_gradient[1] = get_gradient ( x, y, "green", "y");
                 gradient.blue_gradient[0] = get_gradient ( x, y, "blue", "x");
                 gradient.blue_gradient[1] = get_gradient ( x, y, "blue", "y");
-                gradient.energy = gradient.red_gradient[0]^2 + gradient.red_gradient[1]^2 + gradient.green_gradient[0]^2 + gradient.green_gradient[1]^2 +
-                        gradient.blue_gradient[0]^2 + gradient.blue_gradient[1]^2.
+                gradient.energy = square(gradient.red_gradient[0]) + square(gradient.red_gradient[1]) + square(gradient.green_gradient[0]) + square(gradient.green_gradient[1]) +
+                        square(gradient.blue_gradient[0]) + square(gradient.blue_gradient[1]);
             }
         }
     }
