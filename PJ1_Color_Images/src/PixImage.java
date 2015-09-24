@@ -347,6 +347,170 @@ public class PixImage {
     }
 
     /**
+     * helper function for sobelEdges()
+     * @param color
+     * @param x
+     * @param y
+     * @return
+     */
+    public short getColor (String color, int x, int y) {
+        if (color.equalsIgnoreCase("red")) {
+            return getRed(x, y);
+        }
+        else if (color.equalsIgnoreCase("green")) {
+            return getGreen(x, y);
+        } else {
+            return getBlue(x, y);
+        }
+    }
+    /**
+     * helper function for sobelEdges(). For each pixel (x, y), you will compute an approximate gradient (gx, gy) for
+     * each of the three colors. Compute the gradient (gx, gy) for requested color with given _convolutions_.
+     *
+     * @param x x-coordinate of the pixel.
+     * @param y y-coordinate of the pixel.
+     * @param color requested color
+     * @param vector x or y, the gradient convolutions is different
+     * @return gradient
+     */
+    public int get_gradient (int x, int y, String color, String vector) {
+        int gradient;
+        int[][] cells = getcells4gradient(x, y);
+        if (vector.equalsIgnoreCase("x")) {
+            gradient = getColor(color, cells[3][0], cells[3][1]) + 2 * getColor(color, cells[4][0],cells[4][1])
+                    + getColor(color, cells[5][0], cells[5][1]) - getColor(color, cells[6][0], cells[6][1])
+                    - 2 * getColor(color, cells[7][0], cells[7][1])- getColor(color, cells[8][0], cells[8][1]);
+        } else {
+            gradient = getColor(color, cells[3][0], cells[3][1]) + 2 * getColor(color, cells[0][0], cells[0][1])
+                    + getColor(color, cells[6][0], cells[6][1]) - getColor(color, cells[5][0], cells[5][1])
+                    - 2 * getColor(color, cells[2][0], cells[2][1]) - getColor(color, cells[8][0], cells[8][1]);
+        }
+        return gradient;
+    }
+    /**
+     * helper function for sobelEdges(). to get the neighbors of (i, j) in "this" input
+     * PixImage (including itself).
+     *
+     * Pixels on the boundary of the output image require special treatment, because they do not have nine neighbors.
+     * We treat them by _reflecting_ the image across each image boundary.
+     * eg. we treat the pixel (-1, 2) as if it had the same RGB intensities as (0, 2),
+     * and the pixel (1, height) as if it had the same RGB intensities as (1, height - 1).
+     *
+     * @param i x-coordinate of the pixel.
+     * @param j y-coordinate of the pixel.
+     * @return the nine neighbors (including itself)
+     */
+    public int[][] getcells4gradient (int i, int j) {
+        int[][] cells = new int[9][2];
+        if(j == 0) {
+            if (i == 0) {
+                cells[0] = new int[]{i,j};
+                cells[1] = new int[]{i,j};
+                cells[2] = new int[]{i,j+1};
+                cells[3] = new int[]{i,j};
+                cells[4] = new int[]{i,j};
+                cells[5] = new int[]{i,j+1};
+                cells[6] = new int[]{i+1,j};
+                cells[7] = new int[]{i+1,j};
+                cells[8] = new int[]{i+1,j+1};
+            }
+            else if ( i == pwidth-1) {
+                cells[0] = new int[]{i,j};
+                cells[1] = new int[]{i,j};
+                cells[2] = new int[]{i,j+1};
+                cells[3] = new int[]{i-1,j};
+                cells[4] = new int[]{i-1,j};
+                cells[5] = new int[]{i-1,j+1};
+                cells[6] = new int[]{i,j};
+                cells[7] = new int[]{i,j};
+                cells[8] = new int[]{i,j+1};
+            } else {
+                cells[0] = new int[]{i,j};
+                cells[1] = new int[]{i,j};
+                cells[2] = new int[]{i,j+1};
+                cells[3] = new int[]{i-1,j};
+                cells[4] = new int[]{i-1,j};
+                cells[5] = new int[]{i-1,j+1};
+                cells[6] = new int[]{i+1,j};
+                cells[7] = new int[]{i+1,j};
+                cells[8] = new int[]{i+1,j+1};
+            }
+        }
+        else if (j == pheight-1) {
+            if (i == 0) {
+                cells[0] = new int[]{i,j-1};
+                cells[1] = new int[]{i,j};
+                cells[2] = new int[]{i,j};
+                cells[3] = new int[]{i,j-1};
+                cells[4] = new int[]{i,j};
+                cells[5] = new int[]{i,j};
+                cells[6] = new int[]{i+1,j-1};
+                cells[7] = new int[]{i+1,j};
+                cells[8] = new int[]{i+1,j};
+            }
+            else if ( i == pwidth-1) {
+                cells[0] = new int[]{i,j-1};
+                cells[1] = new int[]{i,j};
+                cells[2] = new int[]{i,j};
+                cells[3] = new int[]{i-1,j-1};
+                cells[4] = new int[]{i-1,j};
+                cells[5] = new int[]{i-1,j};
+                cells[6] = new int[]{i,j-1};
+                cells[7] = new int[]{i,j};
+                cells[8] = new int[]{i,j};
+            } else {
+                cells[0] = new int[]{i,j-1};
+                cells[1] = new int[]{i,j};
+                cells[2] = new int[]{i,j};
+                cells[3] = new int[]{i-1,j-1};
+                cells[4] = new int[]{i-1,j};
+                cells[5] = new int[]{i-1,j};
+                cells[6] = new int[]{i+1,j-1};
+                cells[7] = new int[]{i+1,j};
+                cells[8] = new int[]{i+1,j};
+            }
+        }
+        else if (i == 0) {
+            cells[0] = new int[]{i,j-1};
+            cells[1] = new int[]{i,j};
+            cells[2] = new int[]{i,j+1};
+            cells[3] = new int[]{i,j-1};
+            cells[4] = new int[]{i,j};
+            cells[5] = new int[]{i,j+1};
+            cells[6] = new int[]{i+1,j-1};
+            cells[7] = new int[]{i+1,j};
+            cells[8] = new int[]{i+1,j+1};
+        }
+        else if (i == pwidth-1) {
+            cells[0] = new int[]{i,j-1};
+            cells[1] = new int[]{i,j};
+            cells[2] = new int[]{i,j+1};
+            cells[3] = new int[]{i-1,j-1};
+            cells[4] = new int[]{i-1,j};
+            cells[5] = new int[]{i-1,j+1};
+            cells[6] = new int[]{i,j-1};
+            cells[7] = new int[]{i,j};
+            cells[8] = new int[]{i,j+1};
+        }
+        return cells;
+    }
+    /**
+     * gradient class. having four members: gradient for red, gradient for green, gradient for blue, and energy.
+     *
+     */
+    static class gradient {
+        public static int[] red_gradient = new int[2];
+        public static int[] green_gradient = new int[2];
+        public static int[] blue_gradient = new int[2];
+        public static int energy = 0;
+    }
+    /**
+     * helper function for sobelEdges() to get the square calculation for x
+     */
+    public int square (int x) {
+        return x*x;
+    }
+    /**
      * sobelEdges() applies the Sobel operator, identifying edges in "this"
      * image.  The Sobel operator computes a magnitude that represents how
      * strong the edge is.  We compute separate gradients for the red, blue, and
@@ -361,68 +525,6 @@ public class PixImage {
      * @return a grayscale PixImage representing the edges of the input image.
      * Whiter pixels represent stronger edges.
      */
-    public short getColor (String color, int x, int y) {
-        if (color.equalsIgnoreCase("red")) {
-            return getRed(x, y);
-        }
-        else if (color.equalsIgnoreCase("green")) {
-            return getGreen(x, y);
-        } else {
-            return getBlue(x, y);
-        }
-    }
-    public int get_gradient (int x, int y, String color, String vector) {
-        int gradient;
-        if (vector.equalsIgnoreCase("x")) {
-            int[][] cells = getcells4gradient(x, y, vector);
-            gradient = getColor(color, cells[3][0], cells[3][1]) + getColor(color, cells[5][0], cells[5][1])
-                    + 2 * getColor(color, cells[4][0],cells[4][1])
-                    - getColor(color, cells[6][0], cells[6][1]) + getColor(color, cells[8][0], cells[8][1])
-                    - 2 * (getColor(color, cells[7][0], cells[7][1]));
-        } else {
-            int[][] cells = getcells4gradient(x, y, vector);
-            gradient = getColor(color, cells[3][0], cells[3][1]) + getColor(color, cells[5][0], cells[5][1])
-                    + 2 * getColor(color, cells[4][0], cells[4][1])
-                    - getColor(color, cells[6][0], cells[6][1]) + getColor(color, cells[8][0], cells[8][1])
-                    - 2 * (getColor(color, cells[7][0], cells[7][1]));
-        }
-        return gradient;
-    }
-    public int[][] getcells4gradient (int i, int j, String vector) {
-        int[][] cells = new int[9][2];
-        if (vector.equalsIgnoreCase("x")) {
-            cells[0] = new int[]{i,j-1};
-            cells[1] = new int[]{i,j};
-            cells[2] = new int[]{i,j+1};
-            cells[3] = new int[]{i-1,j-1};
-            cells[4] = new int[]{i-1,j};
-            cells[5] = new int[]{i-1,j+1};
-            cells[6] = new int[]{i+1,j-1};
-            cells[7] = new int[]{i+1,j};
-            cells[8] = new int[]{i+1,j+1};
-        } else {
-            cells[0] = new int[]{i-1,j};
-            cells[1] = new int[]{i,j};
-            cells[2] = new int[]{i+1,j};
-            cells[3] = new int[]{i-1,j-1};
-            cells[4] = new int[]{i,j-1};
-            cells[5] = new int[]{i+1,j-1};
-            cells[6] = new int[]{i-1,j+1};
-            cells[7] = new int[]{i,j+1};
-            cells[8] = new int[]{i+1,j+1};
-        }
-        return cells;
-    }
-
-    static class gradient {
-        public static int[] red_gradient = new int[2];
-        public static int[] green_gradient = new int[2];
-        public static int[] blue_gradient = new int[2];
-        public static int energy = 0;
-    }
-    public int square (int x) {
-        return x*x;
-    }
     public PixImage sobelEdges() {
         // Replace the following line with your solution.
         gradient[][] gradient4image = new gradient[pwidth][pheight];
@@ -443,9 +545,13 @@ public class PixImage {
                         square(gradient.blue_gradient[0]) + square(gradient.blue_gradient[1]);
             }
         }
-    }
         // Don't forget to use the method mag2gray() above to convert energies to
         // pixel intensities.
+        
+
+
+    }
+
 
 
 
