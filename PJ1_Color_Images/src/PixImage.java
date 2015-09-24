@@ -491,6 +491,16 @@ public class PixImage {
             cells[6] = new int[]{i,j-1};
             cells[7] = new int[]{i,j};
             cells[8] = new int[]{i,j+1};
+        } else {
+            cells[0] = new int[]{i,j-1};
+            cells[1] = new int[]{i,j};
+            cells[2] = new int[]{i,j+1};
+            cells[3] = new int[]{i-1,j-1};
+            cells[4] = new int[]{i-1,j};
+            cells[5] = new int[]{i-1,j+1};
+            cells[6] = new int[]{i+1,j-1};
+            cells[7] = new int[]{i+1,j};
+            cells[8] = new int[]{i+1,j+1};
         }
         return cells;
     }
@@ -659,15 +669,15 @@ public class PixImage {
         doTest(image1.boxBlur(2).equals(image1.boxBlur(1).boxBlur(1)),
                 "Incorrect box blur (1 rep + 1 rep):\n" +
                         image1.boxBlur(2) + image1.boxBlur(1).boxBlur(1));
-//
-//        System.out.println("Testing edge detection on a 3x3 image.");
-//        doTest(image1.sobelEdges().equals(
-//                        array2PixImage(new int[][] { { 104, 189, 180 },
-//                                { 160, 193, 157 },
-//                                { 166, 178, 96 } })),
-//                "Incorrect Sobel:\n" + image1.sobelEdges());
-//
-//
+
+        System.out.println("Testing edge detection on a 3x3 image.");
+        doTest(image1.sobelEdges().equals(
+                        array2PixImage(new int[][] { { 104, 189, 180 },
+                                { 160, 193, 157 },
+                                { 166, 178, 96 } })),
+                "Incorrect Sobel:\n" + image1.sobelEdges());
+
+
         PixImage image2 = array2PixImage(new int[][] { { 0, 100, 100 },
                 { 0, 0, 100 } });
         System.out.println("Testing getWidth/getHeight on a 2x3 image.  " +
@@ -682,10 +692,10 @@ public class PixImage {
                                 { 25, 50, 75 } })),
                 "Incorrect box blur (1 rep):\n" + image2.boxBlur(1));
 
-//        System.out.println("Testing edge detection on a 2x3 image.");
-//        doTest(image2.sobelEdges().equals(
-//                        array2PixImage(new int[][] { { 122, 143, 74 },
-//                                { 74, 143, 122 } })),
-//                "Incorrect Sobel:\n" + image2.sobelEdges());
+        System.out.println("Testing edge detection on a 2x3 image.");
+        doTest(image2.sobelEdges().equals(
+                        array2PixImage(new int[][] { { 122, 143, 74 },
+                                { 74, 143, 122 } })),
+                "Incorrect Sobel:\n" + image2.sobelEdges());
     }
 }
