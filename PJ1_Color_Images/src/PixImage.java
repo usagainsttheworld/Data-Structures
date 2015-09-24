@@ -522,11 +522,16 @@ public class PixImage {
      *
      * See http://en.wikipedia.org/wiki/Sobel_operator#Formulation for details.
      *
+     * energy(x, y) = gx(red)^2 + gy(red)^2 + gx(green)^2 + gy(green)^2 + gx(blue)^2 + gy(blue)^2.
+     *
      * @return a grayscale PixImage representing the edges of the input image.
      * Whiter pixels represent stronger edges.
      */
     public PixImage sobelEdges() {
         // Replace the following line with your solution.
+        // Don't forget to use the method mag2gray() above to convert energies to
+        // pixel intensities.
+        PixImage sobel_edge_image = new PixImage(pwidth,pheight);
         gradient[][] gradient4image = new gradient[pwidth][pheight];
         for (int i = 0; i < pwidth; i++) {
             for (int j = 0; j < pheight; j++) {
@@ -541,19 +546,14 @@ public class PixImage {
                 gradient.green_gradient[1] = get_gradient ( x, y, "green", "y");
                 gradient.blue_gradient[0] = get_gradient ( x, y, "blue", "x");
                 gradient.blue_gradient[1] = get_gradient ( x, y, "blue", "y");
-                gradient.energy = square(gradient.red_gradient[0]) + square(gradient.red_gradient[1]) + square(gradient.green_gradient[0]) + square(gradient.green_gradient[1]) +
-                        square(gradient.blue_gradient[0]) + square(gradient.blue_gradient[1]);
+                gradient.energy = square(gradient.red_gradient[0]) + square(gradient.red_gradient[1])
+                                + square(gradient.green_gradient[0]) + square(gradient.green_gradient[1])
+                                + square(gradient.blue_gradient[0]) + square(gradient.blue_gradient[1]);
+                sobel_edge_image.setPixel(x, y, mag2gray(gradient.energy), mag2gray(gradient.energy), mag2gray(gradient.energy));
             }
         }
-        // Don't forget to use the method mag2gray() above to convert energies to
-        // pixel intensities.
-        
-
-
+        return sobel_edge_image;
     }
-
-
-
 
     /**
      * TEST CODE:  YOU DO NOT NEED TO FILL IN ANY METHODS BELOW THIS POINT.
