@@ -32,12 +32,80 @@ public class RunLengthEncoding implements Iterable {
      */
 
 
+    /**
+     *  A DListNode1 is a node in a DList (doubly-linked list).
+     */
+    public class DlistNode {
+        /**
+         *  item references the item stored in the current node.
+         *  prev references the previous node in the DList.
+         *  next references the next node in the DList.
+         */
+        public int item;
+        DlistNode prev;
+        DlistNode next;
 
+        /**
+         *  DListNode() constructor.
+         */
+        DlistNode() {
+            item = 0;
+            prev = null;
+            next = null;
+        }
+        DlistNode(int i) {
+            item = i;
+            prev = null;
+            next = null;
+        }
+    }
+    /**
+     *  A DList is a mutable doubly-linked list.  (No sentinel, not
+     *  circularly linked.)
+     */
+    public class Dlist {
+        /**
+         *  head references the first node.
+         *  tail references the last node.
+         */
+        protected DlistNode head;
+        protected DlistNode tail;
+        protected long size;
+
+        /**
+         *  DList1() constructor for an empty DList1.
+         */
+        public Dlist() {
+            head = null;
+            tail = null;
+            size = 0;
+        }
+        /**
+         *  DList1() constructor for a one-node DList1.
+         */
+        public Dlist(int a) {
+            head = new DlistNode();
+            tail = head;
+            head.item = a;
+            size = 1;
+        }
+        /**
+         *  DList1() constructor for a two-node DList1.
+         */
+        public Dlist (int a, int b) {
+            head = new DlistNode();
+            head.item = a;
+            tail = new DlistNode();
+            tail.item = b;
+            head.next = tail;
+            tail.prev = head;
+            size = 2;
+        }
+    }
 
     /**
      *  The following methods are required for Part II.
      */
-
     /**
      *  RunLengthEncoding() (with two parameters) constructs a run-length
      *  encoding of a black PixImage of the specified width and height, in which
@@ -49,6 +117,7 @@ public class RunLengthEncoding implements Iterable {
 
     public RunLengthEncoding(int width, int height) {
         // Your solution here.
+
     }
 
     /**
